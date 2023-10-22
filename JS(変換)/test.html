@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>String Replacement App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.min.css">
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-container>
+        <v-textarea v-model="inputText" label="テキストを入力"></v-textarea>
+        <v-btn @click="previewText" color="primary">プレビュー</v-btn>
+      </v-container>
+
+      <v-dialog v-model="isModalVisible" max-width="800px">
+        <v-card>
+          <v-card-title>プレビュー</v-card-title>
+          <v-card-text>
+            <div v-html="previewedText"></div>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="closeModal">閉じる</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-app>
+  </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.1/dist/vuetify.min.js"></script>
+<script>
+new Vue({
+  el: '#app',
+  vuetify: new Vuetify(),
+  data: {
+    inputText: '',
+    previewedText: '',
+    isModalVisible: false
+  },
+  methods: {
+    previewText() {
+      // ルールに基づいて文字列を置換
+      this.previewedText = this.inputText
+        .replace(/\{table\}/g, '<table>')
+        .replace(/\{\/table\}/g, '</table>')
+        .replace(/\{header\}/g, '<thead><th>')
+        .replace(/\{\/header\}/g, '</th></thead>')
+        .replace(/\{col\}/g, '<td>')
+        .replace(/\{\/col\}/g, '</td>')
+        .replace(/\{body\}/g, '<tbody><tr>')
+        .replace(/\{\/body\}/g, '</tr></tbody>')
+        .replace(/\{strong\}/g, '<strong>')
+        .replace(/\{\/strong\}/g, '</strong>')
+        .replace(/\{header1\}/g, '<h1>')
+        .replace(/\{\/header1\}/g, '</h1>')
+        .replace(/\{link (.*?)\}/g, '<a href="$1">');
+
+      // モーダルを表示
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      // モーダルを非表示
+      this.isModalVisible = false;
+    }
+  }
+});
+</script>
+</html>
